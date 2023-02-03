@@ -12,6 +12,24 @@ library(tidyverse)
 
 x <- read_rds("data/ec.rds")
 x |>
-  mutate(State = str_replace(county_name,".*,", ""))
+  mutate(state = str_replace(county_name,".*,", "")) |>
+  select(state, pop2018, ec_county) |>
+  drop_na() |> 
+  summarize(state_pop = sum(pop2018),
+            ec = mean(ec_county),
+            .by = state,) |>
+  ggplot(aes(x = state_pop, y = ec)) +
+  scale_x_log10(breaks = c(0, 1000000, 10000000))+
+  geom_point()+
+  geom_smooth(formula = y ~ x, method = "lm", se = FALSE)+
+  theme_classic()+
+  labs(
+    title = "Economic Connectedness and Population in US States",
+    subtitle = "Bigger States have counties with lower average economic connectedness.",
+    x = "State Population",
+    y = "Average County Economic Connectedness"
+  )
+  
+  
           
 ```
