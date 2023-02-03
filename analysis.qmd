@@ -1,14 +1,17 @@
 ---
 title: "Counties"
-author: "Your Name"
+author: "Anish B"
 format: html
 ---
 
 ```{r}
 #| echo: false
-#| output: false
+
 
 library(tidyverse)
 
 x <- read_rds("data/ec.rds")
+x |>
+  mutate(State = str_replace(county_name,".*,", ""))
+          
 ```
